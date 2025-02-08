@@ -5,12 +5,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 
-class HomeController extends AbstractController
+class ConnexionController extends AbstractController
 {
-    #[Route('/', name: 'homepage')]  
-    public function index(): Response
+    #[Route('/connexion', name: 'connexion')]  
+    public function connexion(): Response
     {
-        return $this->render('homepage.html.twig');  
+        return $this->render('connexion.html.twig');  
     }
 
 }

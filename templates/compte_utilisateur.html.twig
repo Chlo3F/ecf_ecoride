@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon Compte - Ecoride{% endblock %}
+
+{% block body %}
+<div class="container">
+    <!-- Section Profil Utilisateur -->
+    <section class="profil">
+        <div class="profil-info">
+            <!-- Avatar avec aperçu -->
+            <label for="avatar-upload" class="avatar-label"> <!--à faire css pour plus de lisibilité (clic ok)-->
+                <img id="avatar-preview" src="{{ asset('images/avatar.png') }}" alt="Avatar" class="avatar">
+            </label>
+            <input type="file" id="avatar-upload" accept="image/*" style="display: none;">
+            
+            <div>
+                <h2>Username</h2>
+                <p>⭐ 0/5 - 0 Avis</p>
+            </div>
+        </div>
+        
+        <div class="credits">
+            <span>00</span>
+            <p>Crédits</p>
+        </div>
+    
+        <div class="role">
+            <input type="checkbox" id="passager"> <label for="passager">Passager</label>
+            <input type="checkbox" id="chauffeur"> <label for="chauffeur">Chauffeur</label>
+        </div>
+    </section>
+    
+
+    <!-- Section Ajout Véhicule -->
+    <section class="vehicule">
+        <h3>Mes véhicules :</h3>
+        <div id="vehicule-list"></div>
+        <button class="toggle-btn" onclick="toggleVehiculeForm()">Ajouter un véhicule</button>
+        <div id="vehicule-form" class="hidden">
+            <label>Plaque d'immatriculation: <input type="text" id="plaque"></label>
+            <label>Date première immatriculation: <input type="date" id="date"></label>
+            <label>Modèle: <input type="text" id="modele"></label>
+            <label>Marque: <input type="text" id="marque"></label>
+            <label>Couleur: <input type="text" id="couleur"></label>
+            <label>Nombre de places: <input type="number" id="places"></label>
+            <button class="valider-btn" onclick="validerVehicule()">Valider</button>
+        </div>
+    </section>
+
+    <!-- Section Préférences -->
+    <section class="preferences">
+        <h3>Mes préférences</h3>
+        <label><input type="checkbox" id="fumeur"> Fumeur / Non fumeur</label>
+        <label><input type="checkbox" id="animaux"> Animaux / Pas d'animaux</label>
+        <div id="preferences-list"></div>
+        <button class="add-pref-btn" onclick="addPreferenceInput()">Ajouter une préférence</button>
+        <button class="valider-pref-btn" onclick="validerPreferences()">Valider les préférences</button>
+    </section>
+
+    <!-- Section Historique -->
+    <section class="historique">
+        <h3>Mes covoiturages à venir :</h3>
+        <ul>
+            <li>23/12/2024 : Paris > Lyon <button class="demarrer">Démarrer</button></li>
+        </ul>
+        <h3>Mon historique de voyage :</h3>
+        <ul>
+            <li>10/12/2024 : Paris > Lyon <a href="#">Annuler le voyage</a></li>
+            <li>05/10/2024 : Marseille > Bordeaux <span class="valide">Validé!</span></li>
+            <li>07/08/2024 : Bordeaux > Nantes <span class="valide">Validé!</span></li>
+        </ul>
+    </section>
+</div>
+
+<script src="{{ asset('js/compte_utilisateur.js') }}"></script>
+
+{% endblock %}

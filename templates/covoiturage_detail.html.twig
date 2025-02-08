@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détail du Covoiturage - EcoRide{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h2 class="mb-3">Détail du Covoiturage</h2>
+
+    <div class="row">
+        <!-- Colonne principale avec les détails -->
+        <div class="col-md-8">
+            <div class="card p-3 mb-3">
+                <h4 class="mb-2">{{ trajet.date|date('l, d F') }}</h4>
+                <div class="d-flex align-items-center">
+                    <div>
+                        <p class="mb-1"><strong>Départ :</strong> {{ trajet.depart }} ({{ trajet.heure_depart|date('H:i') }})</p>
+                        <p><strong>Arrivée :</strong> {{ trajet.arrivee }} ({{ trajet.heure_arrivee|date('H:i') }})</p>
+                    </div>
+                    <div class="ms-auto">
+                        <img src="{{ asset('images/electric.png') }}" alt="Électrique" class="icon-electric">
+                    </div>
+                </div>
+            </div>
+
+            <div class="card p-3">
+                <h4>Conducteur</h4>
+                <div class="d-flex align-items-center">
+                    <img src="{{ conducteur.photo ? asset(conducteur.photo) : asset('images/default-user.png') }}" alt="Conducteur" class="driver-photo me-3">
+                    <div>
+                        <h5>{{ conducteur.nom }}</h5>
+                        <p>⭐ {{ conducteur.note }}/5 ({{ conducteur.nombre_avis }} avis)</p>
+                        <p><strong>Voiture :</strong> {{ conducteur.voiture_marque }} - {{ conducteur.voiture_modele }}</p>
+                    </div>
+                </div>
+                <hr>
+                <ul>
+                    <li>{{ conducteur.fumeur ? 'Fumeur' : 'Non fumeur' }}</li>
+                    <li>{{ conducteur.animaux ? 'Animaux acceptés' : 'Pas d\'animaux' }}</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Colonne de droite avec le résumé du trajet -->
+        <div class="col-md-4">
+            <div class="card p-3">
+                <h4 class="text-center">{{ trajet.date|date('l, d F') }}</h4>
+                <p><strong>{{ trajet.depart }} ➝ {{ trajet.arrivee }}</strong></p>
+                <div class="d-flex align-items-center">
+                    <img src="{{ conducteur.photo ? asset(conducteur.photo) : asset('images/default-user.png') }}" alt="Conducteur" class="driver-photo-small me-2">
+                    <div>
+                        <p class="mb-0">{{ conducteur.nom }}</p>
+                        <p>⭐ {{ conducteur.note }}/5</p>
+                    </div>
+                </div>
+                <hr>
+                <p><strong>{{ trajet.places_disponibles }} places disponibles</strong></p>
+                <p><strong>{{ trajet.cout }} Crédits</strong></p>
+                <a href="{{ path('participer_voyage', { id: trajet.id }) }}" class="btn btn-primary w-100">Participer au voyage</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .icon-electric { width: 40px; }
+    .driver-photo { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; }
+    .driver-photo-small { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+</style>
+
+{% endblock %}

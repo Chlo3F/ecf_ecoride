@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard Admin - EcoRide{% endblock %}
+
+{% block body %}
+<div class="dashboard-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <img src="{{ asset('images/logo.png') }}" alt="EcoRide Logo" class="logo">
+        <div class="credits-circle">
+            <h2>00K</h2>
+            <p>Total crédits gagnés</p>
+        </div>
+        <div class="create-employee">
+            <h3>Créer un employé</h3>
+            <form method="post" action="{{ path('admin_create_employee') }}">
+                <input type="text" name="nom" placeholder="Nom" required>
+                <input type="text" name="prenom" placeholder="Prénom" required>
+                <input type="email" name="email" placeholder="E-mail" required>
+                <button type="submit">Créer compte</button>
+            </form>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="admin-header">
+            <h2>WELCOME ADMIN!</h2>
+            <a href="{{ path('logout') }}" class="logout-btn">Déconnexion</a>
+        </header>
+
+        <!-- Graphiques -->
+        <section class="stats-section">
+            <div class="chart">
+                <h3>Covoiturage par jour</h3>
+                <canvas id="chartCovoiturage"></canvas>
+            </div>
+            <div class="chart">
+                <h3>Crédits gagnés par jour</h3>
+                <canvas id="chartCredits"></canvas>
+            </div>
+        </section>
+
+        <!-- Recherche utilisateur -->
+        <section class="search-user">
+            <h3>Rechercher un utilisateur</h3>
+            <input type="text" id="searchInput" placeholder="Rechercher user...">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>E-mail</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                        <tr>
+                            <td>{{ user.id }}</td>
+                            <td>{{ user.nom }} {{ user.prenom }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>
+                                <form method="post" action="{{ path('admin_delete_user', {id: user.id}) }}">
+                                    <button type="submit" class="delete-btn">Supprimer</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+    </main>
+</div>
+
+<script src="{{ asset('js/dashboard.js') }}" defer></script>
+{% endblock %}

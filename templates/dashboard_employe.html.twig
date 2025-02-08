@@ -1,0 +1,114 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard Employé{% endblock %}
+
+{% block body %}
+<div class="dashboard">
+    <header>
+        <div class="logo">ECORIDE</div>
+        <h1>WELCOME {{ app.user.username }}!</h1>
+        <a href="{{ path('app_logout') }}" class="logout">Déconnexion</a>
+    </header>
+
+    <nav class="menu">
+        <a href="#">Tableau de bord</a>
+        <a href="#">Gestion des Avis</a>
+        <a href="#">Covoiturages</a>
+        <a href="#">Modération</a>
+    </nav>
+
+    <section class="stats">
+        <div class="stat-card">
+            <h2>{{ avisEnAttente }}</h2>
+            <p>Avis en attente</p>
+        </div>
+        <div class="stat-card">
+            <h2>{{ litigesNonResolus }}</h2>
+            <p>Litiges non résolus</p>
+        </div>
+        <div class="stat-card">
+            <h2>{{ covoituragesAujourdhui }}</h2>
+            <p>Covoiturages aujourd'hui</p>
+        </div>
+    </section>
+
+    <section class="gestion-avis">
+        <h2>Gestion des Avis</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Username</th>
+                    <th>Avis</th>
+                    <th>Valider / Refuser</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for avis in avisList %}
+                    <tr>
+                        <td>{{ avis.date }}</td>
+                        <td>{{ avis.username }}</td>
+                        <td>{{ avis.commentaire }}</td>
+                        <td>
+                            <a href="{{ path('valider_avis', {id: avis.id}) }}" class="btn-valid">✔</a>
+                            <a href="{{ path('refuser_avis', {id: avis.id}) }}" class="btn-refuse">✖</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+
+    <section class="covoiturage">
+        <h2>Covoiturage</h2>
+        <input type="text" placeholder="Recherche par pseudo, numéro de covoiturage">
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Numéro covoiturage</th>
+                    <th>Trajet</th>
+                    <th>Nom conducteur</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for covoiturage in covoiturages %}
+                    <tr>
+                        <td>{{ covoiturage.date }}</td>
+                        <td>{{ covoiturage.numero }}</td>
+                        <td>{{ covoiturage.trajet }}</td>
+                        <td>{{ covoiturage.conducteur }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+
+    <section class="moderation">
+        <h2>Modération</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Numéro</th>
+                    <th>Litige</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for litige in litiges %}
+                    <tr>
+                        <td>{{ litige.date }}</td>
+                        <td>{{ litige.numero }}</td>
+                        <td>{{ litige.description }}</td>
+                        <td>
+                            <a href="{{ path('contacter_utilisateur', {id: litige.id}) }}" class="btn-contact">Contacter</a>
+                            <a href="{{ path('archiver_litige', {id: litige.id}) }}" class="btn-archive">Archiver</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+</div>
+{% endblock %}
