@@ -32,7 +32,7 @@
     
 
     <!-- Section Ajout Véhicule -->
-    <section class="vehicule">
+    <section class="vehicule" id="section-vehicule">
         <h3>Mes véhicules :</h3>
         <div id="vehicule-list"></div>
         <button class="toggle-btn" onclick="toggleVehiculeForm()">Ajouter un véhicule</button>
@@ -48,7 +48,7 @@
     </section>
 
     <!-- Section Préférences -->
-    <section class="preferences">
+    <section class="preferences" id="section-preferences">
         <h3>Mes préférences</h3>
         <label><input type="checkbox" id="fumeur"> Fumeur / Non fumeur</label>
         <label><input type="checkbox" id="animaux"> Animaux / Pas d'animaux</label>
@@ -56,6 +56,14 @@
         <button class="add-pref-btn" onclick="addPreferenceInput()">Ajouter une préférence</button>
         <button class="valider-pref-btn" onclick="validerPreferences()">Valider les préférences</button>
     </section>
+
+   
+    <!-- Bouton "Saisir un Voyage" -->
+<div class="text-center" id="section-voyage">
+    <a href="{{ path('saisir_voyage') }}" class="btn btn-primary">
+        Saisir un Voyage
+    </a>
+</div>
 
     <!-- Section Historique -->
     <section class="historique">

@@ -5,9 +5,14 @@ namespace App\Entity;
 use App\Repository\UtilisateurRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UtilisateurRepository::class)]
-class Utilisateur
+class Utilisateur implements PasswordAuthenticatedUserInterface
+
+
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -15,24 +20,35 @@ class Utilisateur
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 2, max: 50)]
     private ?string $nom = null;
 
     #[ORM\Column(length: 50)]
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 2, max: 50)]
     private ?string $prenom = null;
 
     #[ORM\Column(length: 50)]
-    private ?string $motDePasse = null;
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 8)]
+    private ?string $password = null;
 
     #[ORM\Column(length: 50)]
+    #[Assert\NotBlank]
     private ?string $email = null;
 
     #[ORM\Column(length: 50)]
+    #[Assert\NotBlank]
+    #[Assert\Regex(pattern: '/^(\+?\d{1,3}[- ]?)?\d{10}$/', message: 'Numéro invalide')]
     private ?string $telephone = null;
 
     #[ORM\Column(length: 100)]
+    #[Assert\NotBlank]
     private ?string $adresse = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Assert\NotBlank]
     private ?\DateTimeInterface $dateNaissance = null;
 
     #[ORM\Column]
@@ -42,7 +58,12 @@ class Utilisateur
     private $photo = null;
 
     #[ORM\Column(length: 50)]
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 3, max: 50)]
     private ?string $pseudo = null;
+
+    #[ORM\Column(type: 'json')]
+    private array $roles = [];
 
 
 
@@ -87,14 +108,14 @@ class Utilisateur
         return $this;
     }
 
-    public function getMotDePasse(): ?string
+    public function getPassword(): ?string
     {
-        return $this->motDePasse;
+        return $this->password;
     }
 
-    public function setMotDePasse(string $motDePasse): static
+    public function setPassword(string $password): static
     {
-        $this->motDePasse = $motDePasse;
+        $this->password = $password;
 
         return $this;
     }
@@ -182,6 +203,22 @@ class Utilisateur
 
         return $this;
     }
+
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+        return $this;
+    }
+
+    
 
     
 

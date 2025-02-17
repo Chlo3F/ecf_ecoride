@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Saisir Voyage{% endblock %}
+
+{% block body %}
+
+<div class="container">
+    <h2 class="text-center">Saisir un Voyage</h2>
+
+    <form method="post">
+        <!-- Ville de Départ -->
+        <div class="mb-3">
+            <label for="depart" class="form-label">Ville de départ</label>
+            <input list="villes" class="form-control" id="depart" name="depart" required>
+        </div>
+
+        <!-- Ville d'Arrivée -->
+        <div class="mb-3">
+            <label for="arrivee" class="form-label">Ville d'arrivée</label>
+            <input list="villes" class="form-control" id="arrivee" name="arrivee" required>
+        </div>
+
+        <!-- Liste des villes françaises -->
+        <datalist id="villes">
+            <option value="Paris">
+            <option value="Lyon">
+            <option value="Marseille">
+            <option value="Toulouse">
+            <option value="Bordeaux">
+            <!-- Ajoute d'autres villes si nécessaire -->
+        </datalist>
+
+        <!-- Date et Heure de Départ -->
+        <div class="mb-3">
+            <label for="date_depart" class="form-label">Date et heure de départ</label>
+            <input type="datetime-local" class="form-control" id="date_depart" name="date_depart" required>
+        </div>
+
+        <!-- Date et Heure d'Arrivée -->
+        <div class="mb-3">
+            <label for="date_arrivee" class="form-label">Date et heure d'arrivée</label>
+            <input type="datetime-local" class="form-control" id="date_arrivee" name="date_arrivee" required>
+        </div>
+
+        <!-- Véhicule Électrique (Oui / Non) -->
+        <div class="mb-3">
+            <label class="form-label">Le trajet se fait-il en voiture électrique ?</label><br>
+            <input type="radio" id="electrique_oui" name="electrique" value="oui" required>
+            <label for="electrique_oui">Oui</label>
+            <input type="radio" id="electrique_non" name="electrique" value="non" required>
+            <label for="electrique_non">Non</label>
+        </div>
+
+        <button type="submit" class="btn btn-success">Valider le trajet</button>
+    </form>
+</div>
+{% endblock %}
+

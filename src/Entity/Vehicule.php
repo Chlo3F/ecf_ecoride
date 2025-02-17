@@ -6,6 +6,7 @@ use App\Repository\VehiculeRepository;
 use App\Enum\TypeEnergie;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: VehiculeRepository::class)]
 class Vehicule
@@ -16,18 +17,27 @@ class Vehicule
     private ?int $id = null;
 
     #[ORM\Column(length: 10)]
-    private ?string $immatriculation = null;
+    #[Assert\NotBlank]
+    #[Assert\Regex(
+        pattern: "/^([A-Z]{2}-\d{3}-[A-Z]{2}|\d{1,4} [A-Z]{2} \d{2})$/",
+        message: "Le format de la plaque d'immatriculation est invalide (ex: AB-123-CD ou 1234 AB 56)."
+    )]
+      private ?string $immatriculation = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Assert\NotBlank]
     private ?\DateTimeInterface $datePremiereImmatriculation = null;
 
     #[ORM\Column(length: 50)]
+    #[Assert\NotBlank]
     private ?string $marqueVoiture = null;
 
     #[ORM\Column(length: 50)]
+    #[Assert\NotBlank]
     private ?string $modeleVoiture = null;
 
     #[ORM\Column(length: 20)]
+    #[Assert\NotBlank]
     private ?string $couleur = null;
 
     #[ORM\Column(type: Types::SIMPLE_ARRAY, enumType: TypeEnergie::class)]
