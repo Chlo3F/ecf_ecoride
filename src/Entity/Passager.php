@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\PassagerRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -14,6 +15,9 @@ class Passager
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
+
+    #[ORM\Column(type: Types::BLOB)]
+    private $photo = null;
 
     
 
@@ -39,7 +43,17 @@ class Passager
         $this->reservations = new ArrayCollection();
     }
 
-    
+    public function getPhoto()
+    {
+        return $this->photo;
+    }
+
+    public function setPhoto($photo): static
+    {
+        $this->photo = $photo;
+
+        return $this;
+    }
 
    
 

@@ -3,15 +3,15 @@
 namespace App\Entity;
 
 use App\Repository\UtilisateurRepository;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UtilisateurRepository::class)]
-class Utilisateur implements PasswordAuthenticatedUserInterface
-
+#[UniqueEntity(fields: ['email'], message: 'Il y a déjà un compte avec cet email')]
+class Utilisateur implements  UserInterface, PasswordAuthenticatedUserInterface
 
 {
     #[ORM\Id]
@@ -29,38 +29,16 @@ class Utilisateur implements PasswordAuthenticatedUserInterface
     #[Assert\Length(min: 2, max: 50)]
     private ?string $prenom = null;
 
-    #[ORM\Column(length: 50)]
-    #[Assert\NotBlank]
-    #[Assert\Length(min: 8)]
+    #[ORM\Column(length: 255)]
     private ?string $password = null;
 
     #[ORM\Column(length: 50)]
     #[Assert\NotBlank]
     private ?string $email = null;
 
-    #[ORM\Column(length: 50)]
-    #[Assert\NotBlank]
-    #[Assert\Regex(pattern: '/^(\+?\d{1,3}[- ]?)?\d{10}$/', message: 'Numéro invalide')]
-    private ?string $telephone = null;
-
-    #[ORM\Column(length: 100)]
-    #[Assert\NotBlank]
-    private ?string $adresse = null;
-
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
-    #[Assert\NotBlank]
-    private ?\DateTimeInterface $dateNaissance = null;
-
     #[ORM\Column]
     private ?int $credits = null;
 
-    #[ORM\Column(type: Types::BLOB)]
-    private $photo = null;
-
-    #[ORM\Column(length: 50)]
-    #[Assert\NotBlank]
-    #[Assert\Length(min: 3, max: 50)]
-    private ?string $pseudo = null;
 
     #[ORM\Column(type: 'json')]
     private array $roles = [];
@@ -132,41 +110,6 @@ class Utilisateur implements PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getTelephone(): ?string
-    {
-        return $this->telephone;
-    }
-
-    public function setTelephone(string $telephone): static
-    {
-        $this->telephone = $telephone;
-
-        return $this;
-    }
-
-    public function getAdresse(): ?string
-    {
-        return $this->adresse;
-    }
-
-    public function setAdresse(string $adresse): static
-    {
-        $this->adresse = $adresse;
-
-        return $this;
-    }
-
-    public function getDateNaissance(): ?\DateTimeInterface
-    {
-        return $this->dateNaissance;
-    }
-
-    public function setDateNaissance(\DateTimeInterface $dateNaissance): static
-    {
-        $this->dateNaissance = $dateNaissance;
-
-        return $this;
-    }
 
     public function getCredits(): ?int
     {
@@ -176,30 +119,6 @@ class Utilisateur implements PasswordAuthenticatedUserInterface
     public function setCredits(int $credits): static
     {
         $this->credits = $credits;
-
-        return $this;
-    }
-
-    public function getPhoto()
-    {
-        return $this->photo;
-    }
-
-    public function setPhoto($photo): static
-    {
-        $this->photo = $photo;
-
-        return $this;
-    }
-
-    public function getPseudo(): ?string
-    {
-        return $this->pseudo;
-    }
-
-    public function setPseudo(string $pseudo): static
-    {
-        $this->pseudo = $pseudo;
 
         return $this;
     }
@@ -218,6 +137,15 @@ class Utilisateur implements PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function getUserIdentifier(): string
+    {
+        return $this->email;
+    }
+
+    public function eraseCredentials(): void
+    {
+        // Nettoyage des données sensibles (si nécessaire)
+    }
     
 
     
@@ -229,12 +157,12 @@ class Utilisateur implements PasswordAuthenticatedUserInterface
 
     public function setChauffeur(Chauffeur $chauffeur): static
     {
-        // set the owning side of the relation if necessary
-        if ($chauffeur->getUtilisateur() !== $this) {
-            $chauffeur->setUtilisateur($this);
-        }
-
         $this->chauffeur = $chauffeur;
+
+        // Associer automatiquement l'utilisateur au chauffeur
+        if ($chauffeur !== null && $chauffeur->getUtilisateur() !== $this) {
+            $chauffeur->setUtilisateur($this);
+    }
 
         return $this;
     }
@@ -274,21 +202,18 @@ class Utilisateur implements PasswordAuthenticatedUserInterface
     }
 
     public function getPassager(): ?Passager
-    {
-        return $this->passager;
+{
+    return $this->passager;
+}
+
+public function setPassager(?Passager $passager): static
+{
+    $this->passager = $passager;
+    if ($passager !== null && $passager->getUtilisateur() !== $this) {
+        $passager->setUtilisateur($this);
     }
-
-    public function setPassager(Passager $passager): static
-    {
-        // set the owning side of the relation if necessary
-        if ($passager->getUtilisateur() !== $this) {
-            $passager->setUtilisateur($this);
-        }
-
-        $this->passager = $passager;
-
-        return $this;
-    }
+    return $this;
+}
 
    
 }

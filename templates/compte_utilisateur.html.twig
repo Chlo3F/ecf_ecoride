@@ -24,10 +24,17 @@
             <p>Crédits</p>
         </div>
     
-        <div class="role">
-            <input type="checkbox" id="passager"> <label for="passager">Passager</label>
-            <input type="checkbox" id="chauffeur"> <label for="chauffeur">Chauffeur</label>
-        </div>
+        <form method="POST" action="{{ path('compte_utilisateur_role') }}">
+            <label>
+                <input type="checkbox" name="roles[]" value="chauffeur" {% if user.chauffeur %}checked{% endif %}>
+                Je veux être chauffeur
+            </label>           
+            <label>
+                <input type="checkbox" name="roles[]" value="passager" {% if user.passager %}checked{% endif %}>
+                Je veux être passager
+            </label>
+            <button type="submit">Valider</button>
+        </form>
     </section>
     
 
@@ -45,6 +52,11 @@
             <label>Nombre de places: <input type="number" id="places"></label>
             <button class="valider-btn" onclick="validerVehicule()">Valider</button>
         </div>
+        <h2>Ajouter un véhicule</h2>
+    {{ form_start(vehiculeForm) }}
+        {{ form_widget(vehiculeForm) }}
+        <button type="submit">Ajouter</button>
+    {{ form_end(vehiculeForm) }}
     </section>
 
     <!-- Section Préférences -->
