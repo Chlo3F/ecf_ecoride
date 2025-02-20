@@ -45,7 +45,7 @@ class Vehicule
 
     #[ORM\ManyToOne(inversedBy: 'vehicules')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Chauffeur $Chauffeur = null;
+    private ?Chauffeur $chauffeur = null;
 
     public function getId(): ?int
     {
@@ -129,12 +129,12 @@ class Vehicule
 
     public function getChauffeur(): ?Chauffeur
     {
-        return $this->Chauffeur;
+        return $this->chauffeur;
     }
 
-    public function setChauffeur(?Chauffeur $Chauffeur): static
+    public function setChauffeur(?Chauffeur $chauffeur): static
     {
-        $this->Chauffeur = $Chauffeur;
+        $this->chauffeur = $chauffeur;
 
         return $this;
     }

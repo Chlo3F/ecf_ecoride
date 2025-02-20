@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ChauffeurRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -14,6 +15,9 @@ class Chauffeur
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
+
+    #[ORM\Column(type: Types::BLOB)]
+    private $photo = null;
 
     #[ORM\OneToOne(inversedBy: 'chauffeur', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
@@ -31,26 +35,36 @@ class Chauffeur
     #[ORM\OneToMany(targetEntity: Voyage::class, mappedBy: 'chauffeur', orphanRemoval: true)]
     private Collection $voyages;
 
-    #[ORM\ManyToOne(inversedBy: 'chauffeur')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Preference $preference = null;
-
     /**
      * @var Collection<int, Avis>
      */
     #[ORM\OneToMany(targetEntity: Avis::class, mappedBy: 'chauffeur')]
     private Collection $avis;
 
-    public function __construct()
+    public function __construct(?Utilisateur $utilisateur = null)
     {
         $this->vehicules = new ArrayCollection();
         $this->voyages = new ArrayCollection();
         $this->avis = new ArrayCollection();
+        $this->utilisateur = $utilisateur;
     }
+    
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getPhoto()
+    {
+        return $this->photo;
+    }
+
+    public function setPhoto($photo): static
+    {
+        $this->photo = $photo;
+
+        return $this;
     }
 
     public function getUtilisateur(): ?Utilisateur
@@ -58,12 +72,18 @@ class Chauffeur
         return $this->utilisateur;
     }
 
-    public function setUtilisateur(Utilisateur $utilisateur): static
-    {
-        $this->utilisateur = $utilisateur;
+    public function setUtilisateur(Utilisateur $utilisateur): self
+{
+    $this->utilisateur = $utilisateur;
 
-        return $this;
+    // Empêcher les boucles infinies
+    if ($utilisateur->getChauffeur() !== $this) {
+        $utilisateur->setChauffeur($this);
     }
+
+    return $this;
+}
+
 
     /**
      * @return Collection<int, Vehicule>
@@ -121,18 +141,6 @@ class Chauffeur
                 $voyages->setChauffeur(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getPreference(): ?Preference
-    {
-        return $this->preference;
-    }
-
-    public function setPreference(?Preference $preference): static
-    {
-        $this->preference = $preference;
 
         return $this;
     }
